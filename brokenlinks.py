@@ -5,7 +5,7 @@ import csv
 import re
 import shutil
 
-hostname = "http://www.beyondexteriors.com"
+hostname = "https://www.fairfaxmortgage.com/"
 h_len = len(hostname)
 
 def get_sitemap_locs(url):
@@ -49,7 +49,9 @@ for url in urls:
             request_links=requests.get(url2)
             print("{}: {} - {}".format(r, request_links.status_code, url2[h_len:]))
         except:
-            requests.exceptions.RequestException(url2)
-            print('exception caught', url2 )
+            # requests.exceptions.RequestException(url2)
+            # print('exception caught', url2 )
+            pass
+    
             
      
