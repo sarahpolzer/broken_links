@@ -48,9 +48,10 @@ for url in urls:
         # query each link for the status code
             all_links_list.append(urltwo)
 for alllink in all_links_list:
+    r+=1
     try: 
         request_links=requests.get(alllink)
-        print("{}: {} - {}".format(r, request_links.status_code, urltwo[h_len:]))
+        print("{}: {} - {}".format(r, request_links.status_code, alllink[h_len:]))
     except:
         # requests.exceptions.RequestException(url2)
         # print('exception caught', url2 
