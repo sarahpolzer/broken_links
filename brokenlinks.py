@@ -4,7 +4,7 @@ from datetime import datetime
 import csv
 import re
 import shutil
-
+from numpy import unique
 hostname = "https://www.fairfaxmortgage.com/"
 h_len = len(hostname)
 
@@ -34,23 +34,24 @@ i = 0
    #requestlink=requests.get(hostname + "url")
   # i += 1
   # print("{}: {} - {}".format(i, requestlink.status_code, url[h_len:]))
-all_links_list=[]
+#all_links_list=[]
 r=0
 for url in urls:
     opens2 = requests.get(url)
     soup2 = BeautifulSoup(opens2.text, 'lxml')
     all_links = soup2.findAll('a')
+    #all_linkstwo=all_links.get('href')
     for link in all_links:
         # store links in variable
-        url2 = link.get('href')
+        urltwo=link.get('href')
         # query each link for the status code
-        r += 1
+        r+=1
         try: 
-            request_links=requests.get(url2)
-            print("{}: {} - {}".format(r, request_links.status_code, url2[h_len:]))
+            request_links=requests.get(urltwo)
+            print("{}: {} - {}".format(r, request_links.status_code, urltwo[h_len:]))
         except:
-            # requests.exceptions.RequestException(url2)
-            # print('exception caught', url2 )
+        # requests.exceptions.RequestException(url2)
+        # print('exception caught', url2 
             pass
     
             
