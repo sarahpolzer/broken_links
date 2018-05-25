@@ -34,20 +34,22 @@ i = 0
    #requestlink=requests.get(hostname + "url")
   # i += 1
   # print("{}: {} - {}".format(i, requestlink.status_code, url[h_len:]))
-
-giantlist = []
+all_links_list=[]
 r=0
 for url in urls:
     opens2 = requests.get(url)
     soup2 = BeautifulSoup(opens2.text, 'lxml')
-    alllinks = soup2.findAll('a', href=True)
-    for link in alllinks:
-        giantlist.append(link)
-    print(giantlist)
-    #giantlist.append(al)
-    #for link in alllinks:
-       #url = str(link).replace("<a href=>","").replace("</a>","")
-       #giantlist.append(url)
-      # requestlink=requests.get(link)
-      # r +=1
-      # print("{}: {} - {}".format(r, requestlink.status_code, url[h_len:]))
+    all_links = soup2.findAll('a')
+    for link in all_links:
+        # store links in variable
+        url2 = link.get('href')
+        # query each link for the status code
+        r += 1
+        try: 
+            request_links=requests.get(url2)
+            print("{}: {} - {}".format(r, request_links.status_code, url2[h_len:]))
+        except:
+            requests.exceptions.RequestException(url2)
+            print('exception caught', url2 )
+            
+     
