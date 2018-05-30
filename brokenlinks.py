@@ -49,13 +49,13 @@ for url in urls:
               all_links_list.append(urltwo)
 
 url_dict = []
-for url in all_links_list[0:65]:
+for url in all_links_list:
     r+=1
     try: 
         request_links=requests.get(url)
         code = request_links.status_code
-        url_dict.append(
-            { "id" : r,
+        url_dict.append({
+            "id" : r,
             "status_code" : code,
             "url_location" : hostname,
             "href" : url}
@@ -63,8 +63,17 @@ for url in all_links_list[0:65]:
     except:
         pass
 #print(url_dict)
+#for item in url_dict:
+    #keys= item.keys()
+   # values = item.values()
+#keys= url_dict.keys()
+#values=url_dict.values()
+f = open('brokenlinks2.csv', "w")
+#f.writelines("id", "status_code", "url_location", "href" )
+f.writelines("{0}\n".format(url_dict[0].keys()).replace('dict_keys([',"").replace('])',""))
 
-f = open('brokenlinks.csv', 'w')
-f.writelines(["%s\n"%item for item in url_dict])
+for item in url_dict: 
+    f.writelines("{}\n".format(item.values()).replace('dict_values([',"").replace(']', ""))
+
 f.close()
 
