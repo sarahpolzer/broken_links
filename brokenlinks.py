@@ -58,7 +58,7 @@ for url in all_links_list:
             "id" : r,
             "status_code" : code,
             "url_location" : hostname,
-            "href" : url}
+            "href" : url }
         )
     except:
         pass
@@ -70,10 +70,10 @@ for url in all_links_list:
 #values=url_dict.values()
 f = open('brokenlinks2.csv', "w")
 #f.writelines("id", "status_code", "url_location", "href" )
-f.writelines("{0}\n".format(url_dict[0].keys()).replace('dict_keys([',"").replace('])',""))
+f.writelines("{0}\n".format(url_dict[0].keys()).replace('dict_keys([',"").replace('])',"").replace("'",""))
 
 for item in url_dict: 
-    f.writelines("{}\n".format(item.values()).replace('dict_values([',"").replace(']', ""))
+    f.writelines("{}\n".format(item.values()).replace('dict_values([',"").replace(']', "").replace("'", "").replace(')',""))
 
 f.close()
 
