@@ -4,7 +4,7 @@ from datetime import datetime
 import csv
 import re
 import shutil
-
+#a list of all the hostnames of clients that 321 works with
 hostnames = [
     'https://www.321webmarketing.com',
     'https://www.accelera.com',
@@ -39,10 +39,11 @@ hostnames = [
     'https://www.tier4mattress.com',
     'https://www.zenbodytherapy.com',
 ]
+
 hostname = "https://https://www.localpawpals.com"
 h_len = len(hostname)
 h_len = 0
-
+#a function for retrieving sitemap locations
 def get_sitemap_locs(url):
    opens=requests.get(url)
    soup=BeautifulSoup(opens.text, 'lxml')
@@ -52,7 +53,7 @@ def get_sitemap_locs(url):
        url = str(link).replace("<loc>","").replace("</loc>","")
        locs.append(url)
    return locs
-
+#a function for retrieving sitemap urls
 def get_sitemap_urls(hostname):
     sitemaps = get_sitemap_locs("{}/sitemap_index.xml".format(hostname))
     urls = []
@@ -61,14 +62,14 @@ def get_sitemap_urls(hostname):
     return urls
 
 all_links_list=[]
-
+#a function for retrieving sitemap
 def get_sitemap(hostname):
     sitemaps = get_sitemap_locs("{}/sitemap_index.xml".format(hostname))
     urls = []
     for sitemap in sitemaps:
         urls += get_sitemap_locs(sitemap)
     return urls
-
+#a function for finding links on a sitemap
 def find_links(urls):
     opens2 = requests.get(url)
     soup2 = BeautifulSoup(opens2.text, 'lxml')
@@ -77,7 +78,7 @@ def find_links(urls):
         urltwo=link.get('href')
         if urltwo not in all_links_list:
             all_links_list.append(urltwo)
-
+#a function for retrieving json data about particular links
 def json_data(all_links_list):
     url_dict = []
     for url in all_links_list:
@@ -94,7 +95,8 @@ def json_data(all_links_list):
         except:
             pass
     return url_dict
-
+#the master function for retrieving links from hostnames, finding json data about links, and exporting
+#json data to csv
 def export_to_csv(hostnames):
     all_sitemaps = []
     all_links = []
