@@ -71,13 +71,15 @@ def get_sitemap(hostname):
     return urls
 #a function for finding links on a sitemap
 def find_links(urls):
-    opens2 = requests.get(url)
+    all_links_list = []
+    opens2 = requests.get(urls)
     soup2 = BeautifulSoup(opens2.text, 'lxml')
     all_links = soup2.findAll('a')
     for link in all_links:
         urltwo=link.get('href')
         if urltwo not in all_links_list:
             all_links_list.append(urltwo)
+              
 #a function for retrieving json data about particular links
 def json_data(all_links_list):
     url_dict = []
@@ -105,8 +107,8 @@ def export_to_csv(hostnames):
         new_sitemap = get_sitemap(hostname)
         all_sitemaps += new_sitemap
     for sitemap in all_sitemaps:
-        find_links(sitemap)
-        all_links += find_links
+         find_links(sitemap)
+         all_links += all_links_list
     for links in all_links:
         json_data(links)
     for json_data in all_json_data:     
@@ -116,8 +118,6 @@ def export_to_csv(hostnames):
             f.writelines("{}\n".format(item.values()).replace('dict_values([',"").replace(']', "").replace("'", "").replace(')',""))
 
         f.close()
-
-export_to_csv("https://www.tech62.com")
 
 
 #for hostname in hostnames:
@@ -153,4 +153,6 @@ export_to_csv("https://www.tech62.com")
 
 #f.close()
 
-export_to_csv(hostnames)
+
+list = ['https://www.cfcc.org',   'https://www.localpawpals.com']
+export_to_csv(list)
