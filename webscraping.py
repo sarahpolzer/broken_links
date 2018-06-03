@@ -43,6 +43,7 @@ def find_links(urls):
 def json_data(all_links_list):
     url_dict = []
     r = 0
+    hostname = 'https://www.beyondexteriors.com/'
     for url in all_links_list:
         url = str(url)
         r+=1
@@ -57,7 +58,8 @@ def json_data(all_links_list):
                 } )
         except:
                 if 'https' not in url and 'tel' not in url:
-                    url = hostname + url
+                    url = url.replace("#", "")
+                    url =  str(hostname) + str(url)
                     request_links=requests.get(url)
                     code = request_links.status_code
                     url_dict.append({"id" : r,
@@ -74,18 +76,8 @@ def export_to_csv(hostnames):
     for hostname in hostnames:
         new_sitemap = get_sitemap(hostname)
         all_sitemaps += new_sitemap
-        # print(new_sitemap)
-    # for sitemap in all_sitemaps:
-    #     new_links = find_links(sitemap)
-    #     all_links += new_links
     all_links += find_links(all_sitemaps)
-    #print(all_links)
-    # for links in all_links:
-    #     new_json_data = json_data(links)
-    #     all_json_data += new_json_data
-    all_json_data += json_data(all_links)
-    #print(all_json_data)
-    #for json in all_json_data:     
+    all_json_data += json_data(all_links)  
     f = open('brokenlinks3.csv', "w")
     f.writelines("{0}\n".format(all_json_data[0].keys()).replace('dict_keys([',"").replace('])',"").replace("'",""))
     for item in all_json_data: 
