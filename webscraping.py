@@ -7,7 +7,7 @@ import re
 import shutil
 import lxml
 import json
-hostnames = [ 'https://www.beyondexteriors.com']
+hostnames = [ 'https://www.beyondexteriors.com', 'https://www.localpawpals.com/']
 
 def get_sitemap_locs(url):
     opens=requests.get(url)
@@ -43,30 +43,50 @@ def find_links(urls):
 def json_data(all_links_list):
     url_dict = []
     r = 0
-    hostname = 'https://www.beyondexteriors.com/'
+    hostname = ['https://www.beyondexteriors.com/', 'https://www.localpawpals.com/']
     for url in all_links_list:
-        url = str(url)
         r+=1
-        try:
-            request_links=requests.get(url)
-            code = request_links.status_code
-            url_dict.append({
-                "id" : r,
-                "status_code" : code ,
-                "url_location" : hostnames,
-                "href" : url 
-                } )
-        except:
+        url = str(url)
+      for hostname in hostnames:  
+        if hostname in url:
+            try:
+                request_links=requests.get(url)
+                code = request_links.status_code
+                url_dict.append({
+                    "id" : r,
+                    "status_code" : code ,
+                    "url_location" : hostname[0],
+                    "href" : url 
+                    } )
+            except:
                 if 'https' not in url and 'tel' not in url:
-                    url = url.replace("#", "")
                     url =  str(hostname) + str(url)
                     request_links=requests.get(url)
                     code = request_links.status_code
                     url_dict.append({"id" : r,
                     "status_code" : code ,
-                    "url_location" : hostnames,
+                    "url_location" : hostname[0],
                     "href" : url } )
-                
+        elif 'localpawpals' in url:
+            try:
+                request_links=requests.get(url)
+                code = request_links.status_code
+                url_dict.append({
+                    "id" : r,
+                    "status_code" : code ,
+                    "url_location" : hostname[1],
+                    "href" : url 
+                    } )
+            except:
+                if 'https' not in url and 'tel' not in url:
+                    url =  str(hostname[0]) + str(url)
+                    request_links=requests.get(url)
+                    code = request_links.status_code
+                    url_dict.append({"id" : r,
+                    "status_code" : code ,
+                    "url_location" : hostname[1],
+                    "href" : url } )
+            
     return url_dict
 
 def export_to_csv(hostnames):
@@ -81,7 +101,7 @@ def export_to_csv(hostnames):
     f = open('brokenlinks3.csv', "w")
     f.writelines("{0}\n".format(all_json_data[0].keys()).replace('dict_keys([',"").replace('])',"").replace("'",""))
     for item in all_json_data: 
-        f.writelines("{}\n".format(item.values()).replace('dict_values([',"").replace(']', "").replace("'", "").replace(')',""))
+        f.writelines("{}\n".format(item.values()).replace('dict_values([',"").replace(']', "").replace("'", "").replace(')',"").replace('[', ""))
     f.close()
 
 export_to_csv(hostnames)
